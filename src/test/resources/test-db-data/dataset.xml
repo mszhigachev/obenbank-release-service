@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dataset>
+    <tb_services
+            id="1"
+            name="service-1"
+            description="service-1 desc"/>
+    <tb_versions
+            id="1"
+            version="v1"
+            created_date="2020-01-01 00:00:00"/>
+    <tb_versions
+            id="2"
+            version="v2"
+            created_date="2021-01-01 00:00:00"/>
+    <tb_releases
+            id="1"
+            name="release-name1"
+            date_start="2022-01-01 00:00:00"
+            date_freeze="2022-01-01 00:00:00"
+            date_end="2022-01-01 00:00:00"
+            description="release-desc1"/>
+    <tb_hotfixes
+            id="1"
+            release_id="1"
+            description="hotfix_desc1"
+            date_fix="2022-01-01 00:00:00"/>
+    <tb_instructions
+            id="1"
+            release_id="1"
+            service_i="1"
+            version_id="1"
+            description="instructions desc1"
+            is_hotfix="false"/>
+    <tb_instructions
+            id="2"
+            release_id="1"
+            service_i="1"
+            version_id="2"
+            description="instructions desc1"
+            is_hotfix="true"/>
+</dataset>

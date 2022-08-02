@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+<!--    <preConditions>-->
+<!--        <dbms type="postgresql"/>-->
+<!--    </preConditions>-->
+
+    <changeSet id="0" author="zhigachev_ms">
+        <tagDatabase tag="db_init"/>
+    </changeSet>
+    <include file="db/v1.0/changelog-v1.0.xml"/>
+
+    <changeSet id="6" author="zhigachev_ms">
+        <tagDatabase tag="v1.0"/>
+    </changeSet>
+<!--    <changeSet id="7" author="zhigachev_ms">-->
+<!--        <tagDatabase tag="v1.0"/>-->
+<!--        <insert tableName="tb_services">-->
+<!--            <column></column>-->
+<!--        </insert>-->
+<!--        <insert tableName="tb_services">-->
+<!--            <column name="name">service-1</column>-->
+<!--        </insert>-->
+<!--        <sql dbms="postgresql"-->
+<!--             endDelimiter=";"-->
+<!--             splitStatements="true"-->
+<!--             stripComments="true">-->
+<!--            insert into tb_services("name",description)-->
+<!--            VALUES-->
+<!--            ('service-1','service-1 desc'),-->
+<!--            ('service-2','service-2 desc')-->
+<!--            ON CONFLICT DO NOTHING;-->
+<!--            COMMIT;-->
+
+<!--            insert into tb_versions(service_id,"version",created_date)-->
+<!--            VALUES-->
+<!--            (1,'v1','2020-01-01 00:00:00'),-->
+<!--            (1,'v2','2022-01-01 00:00:00'),-->
+<!--            (2,'v1','2021-01-01 00:00:00')-->
+<!--            ON CONFLICT DO NOTHING;-->
+
+<!--            insert into tb_releases("name",date_start,date_freeze,date_end,description)-->
+<!--            VALUES-->
+<!--            ('name1','2022-01-01 00:00:00','2022-01-01 00:00:00','2022-01-01 00:00:00','desc1'),-->
+<!--            ('name2','2022-01-01 00:00:00','2023-01-01 00:00:00','2022-01-01 00:00:00','desc2'),-->
+<!--            ('name3','2022-01-01 00:00:00','2024-01-01 00:00:00','2022-01-01 00:00:00','desc3')-->
+<!--            ON CONFLICT DO NOTHING;-->
+<!--            COMMIT;-->
+
+
+<!--            insert into tb_hotfixes(release_id,description,date_fix)-->
+<!--            VALUES-->
+<!--            (1,'hotfix_desc','2020-01-01 00:00:00'),-->
+<!--            (1,'hotfix_desc2','2021-01-01 00:00:00')-->
+<!--            ON CONFLICT DO NOTHING;-->
+<!--            INSERT INTO public.tb_instructions(-->
+<!--            release_id, service_id, version_id, description, is_hotfix)-->
+<!--            VALUES ( 1, 1, 1, 'instructions desc', false),-->
+<!--            ( 1, 1, 2, 'instructions desc2', false),-->
+<!--            ( 2, 2, 3, 'instructions desc2', false)-->
+<!--            ON CONFLICT DO NOTHING;-->
+<!--            COMMIT;-->
+<!--        </sql>-->
+<!--    </changeSet>-->
+
+</databaseChangeLog>

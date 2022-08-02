@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+    <changeSet id="4" author="zhigachev_ms">
+        <createTable remarks="Таблица для хранения информации о планируемых и прошедших хотфиксах" tableName="tb_hotfixes">
+            <column autoIncrement="true" name="id" remarks="Идентификатор хотфикса" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="tb_hotfixes_pkey"/>
+            </column>
+            <column name="release_id" remarks="Идентификатор релиза из таблицы tb_releases" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_fix" remarks="Дата выкладки хотфикса" type="TIMESTAMP WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" remarks="Описание хотфикса" type="VARCHAR(2555)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createIndex tableName="tb_hotfixes" indexName="tb_hotfixes_id_idx">
+            <column name="id"></column>
+        </createIndex>
+        <createIndex tableName="tb_hotfixes" indexName="tb_hotfixes_release_id_idx">
+            <column name="release_id"></column>
+        </createIndex>
+        <addForeignKeyConstraint baseColumnNames="release_id" baseTableName="tb_hotfixes" constraintName="tb_releases_fk" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="tb_releases" validate="true"/>
+
+        <rollback>
+            <dropIndex tableName="tb_hotfixes" indexName="tb_hotfixes_id_idx"/>
+            <dropIndex tableName="tb_hotfixes" indexName="tb_hotfixes_release_id_idx"/>
+            <dropTable tableName="tb_hotfixes"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

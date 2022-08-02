@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+    <changeSet id="1" author="zhigachev_ms">
+        <createTable remarks="Таблица для хранения информации о текущих сервисах" tableName="tb_services">
+            <column autoIncrement="true" name="id" remarks="Идентификатор сервиса" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="tb_services_pkey"/>
+            </column>
+            <column name="name" remarks="Название сервиса" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" remarks="Описание сервиса" type="VARCHAR(2555)"/>
+        </createTable>
+        <createIndex indexName="tb_services_name_idx" tableName="tb_services" unique="true">
+            <column name="name"/>
+        </createIndex>
+        <createIndex indexName="tb_services_id_idx" tableName="tb_services" unique="true">
+            <column name="id"/>
+        </createIndex>
+        <rollback>
+            <dropTable tableName="tb_services"/>
+            <dropIndex tableName="tb_services" indexName="tb_services_name_idx"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>
