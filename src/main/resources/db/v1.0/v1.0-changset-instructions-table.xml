@@ -12,18 +12,18 @@ http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="tb_instructions_pkey"/>
             </column>
             <column name="release_id" remarks="Идентификатор релиза из таблицы tb_releases" type="BIGINT">
-                <constraints nullable="false"/>
+                <constraints nullable="false" foreignKeyName="release_id_tb_instructions_fk" references="tb_releases(id)"/>
             </column>
             <column name="service_id" remarks="Идентификатор сервиса из таблицы tb_services" type="BIGINT">
-                <constraints nullable="false"/>
+                <constraints nullable="false" foreignKeyName="service_id_tb_instructions_fk" references="tb_services(id)"/>
             </column>
             <column name="version_id" remarks="Идентификатор версии из таблицы tb_versions" type="BIGINT">
-                <constraints nullable="false"/>
+                <constraints nullable="false" foreignKeyName="version_id_tb_instructions_fk" references="tb_versions(id)"/>
             </column>
             <column name="description" remarks="Описание для версии сервиса в инструкции" type="VARCHAR(25555)"/>
             <column defaultValueBoolean="false" name="is_hotfix" remarks="Является ли выкладка хотфиксом?" type="BOOLEAN"/>
         </createTable>
-        <createIndex tableName="tb_instructions" indexName="tb_instructions_id_idx">
+        <createIndex tableName="tb_instructions" indexName="tb_instructions_id_idx" unique="true">
             <column name="id"></column>
         </createIndex>
         <createIndex tableName="tb_instructions" indexName="tb_instructions_release_id_idx">
@@ -31,10 +31,8 @@ http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
         </createIndex>
 <!--        <addForeignKeyConstraint baseColumnNames="release_id" baseTableName="tb_instructions" constraintName="tb_releases_fk" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="tb_releases" validate="true"/>-->
 <!--        <addForeignKeyConstraint baseColumnNames="service_id" baseTableName="tb_instructions" constraintName="tb_services_fk" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="tb_services" validate="true"/>-->
-        <addForeignKeyConstraint baseColumnNames="version_id" baseTableName="tb_instructions" constraintName="tb_versions_fk" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="tb_versions" validate="true"/>
+<!--        <addForeignKeyConstraint baseColumnNames="version_id" baseTableName="tb_instructions" constraintName="tb_versions_fk" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="tb_versions" validate="true"/>-->
         <rollback>
-            <dropIndex tableName="tb_instructions" indexName="tb_instructions_id_idx"/>
-            <dropIndex tableName="tb_instructions" indexName="tb_instructions_release_id_idx"/>
             <dropTable tableName="tb_instructions"/>
         </rollback>
     </changeSet>

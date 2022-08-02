@@ -19,12 +19,8 @@ http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
         <createIndex indexName="tb_services_name_idx" tableName="tb_services" unique="true">
             <column name="name"/>
         </createIndex>
-        <createIndex indexName="tb_services_id_idx" tableName="tb_services" unique="true">
-            <column name="id"/>
-        </createIndex>
         <rollback>
             <dropTable tableName="tb_services"/>
-            <dropIndex tableName="tb_services" indexName="tb_services_name_idx"/>
         </rollback>
     </changeSet>
 

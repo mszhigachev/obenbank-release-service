@@ -50,7 +50,7 @@ public class ApplicationServiceController {
 
     @ApiOperation(value = "Добавление версии")
     @PostMapping("/versions")
-    public VersionDto save(@ApiParam(value = "JSON с именем сервиса и его версии") @RequestBody ApplicationServiceVersionDto dto, HttpServletResponse response) {
+    public VersionDto saveVersion(@ApiParam(value = "JSON с именем сервиса и его версии") @RequestBody ApplicationServiceVersionDto dto, HttpServletResponse response) {
         VersionDto versionDto = applicationServiceService.saveVersion(dto);
         response.setHeader("Location", String.format("/services/%s/versions/%s", versionDto.getServiceId(), versionDto.getId()));
         return versionDto;

@@ -12,7 +12,7 @@ http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="tb_versions_pkey"/>
             </column>
             <column name="service_id" type="BIGINT">
-                <constraints nullable="false"/>
+                <constraints nullable="false" foreignKeyName="service_id_tb_versions_fk" references="tb_services(id)"/>
             </column>
             <column name="version" type="VARCHAR(32)">
                 <constraints nullable="false"/>
@@ -21,24 +21,11 @@ http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
                 <constraints nullable="false"/>
             </column>
         </createTable>
-        <addForeignKeyConstraint baseColumnNames="service_id"
-                                 baseTableName="tb_versions"
-                                 constraintName="tb_services_fk"
-                                 deferrable="false"
-                                 initiallyDeferred="false"
-                                 onDelete="RESTRICT"
-                                 onUpdate="NO ACTION"
-                                 referencedColumnNames="id"
-                                 referencedTableName="tb_services"
-                                 validate="true"/>
-
-        <createIndex tableName="tb_versions" indexName="tb_versions_id_idx">
-            <column name="id"/>
+        <createIndex tableName="tb_versions" indexName="tb_versions_id_idx" unique="true">
+            <column name="id"></column>
         </createIndex>
-
         <rollback>
             <dropTable tableName="tb_versions"/>
-            <dropIndex tableName="tb_versions" indexName="tb_versions_id_idx"/>
         </rollback>
     </changeSet>
 

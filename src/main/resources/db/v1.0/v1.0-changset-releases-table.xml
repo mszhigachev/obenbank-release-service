@@ -25,11 +25,10 @@ http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
                 <constraints nullable="false"/>
             </column>
         </createTable>
-        <createIndex tableName="tb_releases" indexName="tb_releases_id_idx">
+        <createIndex tableName="tb_releases" indexName="tb_releases_id_idx" unique="true">
             <column name="id"></column>
         </createIndex>
         <rollback>
-            <dropIndex tableName="tb_releases" indexName="tb_releases_id_idx"/>
             <dropTable tableName="tb_releases"/>
         </rollback>
     </changeSet>
