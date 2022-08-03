@@ -7,21 +7,29 @@
 http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
 
     <changeSet id="5" author="zhigachev_ms">
-        <createTable remarks="Таблица для хранения информации об инструкциях для релизов и хотфиксов" tableName="tb_instructions">
-            <column autoIncrement="true" name="id" remarks="Идентификатор инструкции" type="BIGINT">
+        <createSequence sequenceName="tb_instructions_id_seq" startValue="1" minValue="1" maxValue="9223372036854775807"
+                        incrementBy="1"/>
+        <createTable remarks="Таблица для хранения информации об инструкциях для релизов и хотфиксов"
+                     tableName="tb_instructions">
+            <column name="id" remarks="Идентификатор инструкции" type="BIGINT"
+                    defaultValueComputed="nextval('tb_instructions_id_seq')">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="tb_instructions_pkey"/>
             </column>
             <column name="release_id" remarks="Идентификатор релиза из таблицы tb_releases" type="BIGINT">
-                <constraints nullable="false" foreignKeyName="release_id_tb_instructions_fk" references="tb_releases(id)"/>
+                <constraints nullable="false" foreignKeyName="release_id_tb_instructions_fk"
+                             references="tb_releases(id)"/>
             </column>
             <column name="service_id" remarks="Идентификатор сервиса из таблицы tb_services" type="BIGINT">
-                <constraints nullable="false" foreignKeyName="service_id_tb_instructions_fk" references="tb_services(id)"/>
+                <constraints nullable="false" foreignKeyName="service_id_tb_instructions_fk"
+                             references="tb_services(id)"/>
             </column>
             <column name="version_id" remarks="Идентификатор версии из таблицы tb_versions" type="BIGINT">
-                <constraints nullable="false" foreignKeyName="version_id_tb_instructions_fk" references="tb_versions(id)"/>
+                <constraints nullable="false" foreignKeyName="version_id_tb_instructions_fk"
+                             references="tb_versions(id)"/>
             </column>
             <column name="description" remarks="Описание для версии сервиса в инструкции" type="VARCHAR(25555)"/>
-            <column defaultValueBoolean="false" name="is_hotfix" remarks="Является ли выкладка хотфиксом?" type="BOOLEAN"/>
+            <column defaultValueBoolean="false" name="is_hotfix" remarks="Является ли выкладка хотфиксом?"
+                    type="BOOLEAN"/>
         </createTable>
         <createIndex tableName="tb_instructions" indexName="tb_instructions_id_idx" unique="true">
             <column name="id"></column>
@@ -29,9 +37,6 @@ http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
         <createIndex tableName="tb_instructions" indexName="tb_instructions_release_id_idx">
             <column name="release_id"></column>
         </createIndex>
-<!--        <addForeignKeyConstraint baseColumnNames="release_id" baseTableName="tb_instructions" constraintName="tb_releases_fk" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="tb_releases" validate="true"/>-->
-<!--        <addForeignKeyConstraint baseColumnNames="service_id" baseTableName="tb_instructions" constraintName="tb_services_fk" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="tb_services" validate="true"/>-->
-<!--        <addForeignKeyConstraint baseColumnNames="version_id" baseTableName="tb_instructions" constraintName="tb_versions_fk" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="tb_versions" validate="true"/>-->
         <rollback>
             <dropTable tableName="tb_instructions"/>
         </rollback>

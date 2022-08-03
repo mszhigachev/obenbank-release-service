@@ -7,8 +7,11 @@
 http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
 
     <changeSet id="1" author="zhigachev_ms">
+        <createSequence sequenceName="tb_services_id_seq" startValue="1" minValue="1" maxValue="9223372036854775807"
+                        incrementBy="1"/>
         <createTable remarks="Таблица для хранения информации о текущих сервисах" tableName="tb_services">
-            <column autoIncrement="true" name="id" remarks="Идентификатор сервиса" type="BIGINT">
+            <column name="id" remarks="Идентификатор сервиса" type="BIGINT"
+                    defaultValueComputed="nextval('tb_services_id_seq')">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="tb_services_pkey"/>
             </column>
             <column name="name" remarks="Название сервиса" type="VARCHAR(255)">
@@ -21,6 +24,7 @@ http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
         </createIndex>
         <rollback>
             <dropTable tableName="tb_services"/>
+            <dropSequence sequenceName="tb_services_id_seq"/>
         </rollback>
     </changeSet>
 

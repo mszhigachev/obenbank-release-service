@@ -77,8 +77,7 @@ public class ApplicationServiceServiceImpl implements ApplicationServiceService 
         log.info("Saving new version by service name: {}, set version: {}", dto.getName(), dto.getVersion());
 
         ApplicationService service = applicationServiceRepository.findByName(dto.getName())
-                .orElse(applicationServiceRepository.save(new ApplicationService(dto.getName())));
-
+                .orElseGet(() -> applicationServiceRepository.save(new ApplicationService(dto.getName())));
 
         Version version = new Version();
         version.setVersion(dto.getVersion());

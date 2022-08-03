@@ -7,12 +7,14 @@
 http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
 
     <changeSet id="2" author="zhigachev_ms">
+        <createSequence sequenceName="tb_versions_id_seq" startValue="1" minValue="1" maxValue="9223372036854775807"
+                        incrementBy="1"/>
         <createTable tableName="tb_versions">
-            <column autoIncrement="true" name="id" type="BIGINT">
+            <column name="id" type="BIGINT" defaultValueComputed="nextval('tb_versions_id_seq')">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="tb_versions_pkey"/>
             </column>
             <column name="service_id" type="BIGINT">
-                <constraints nullable="false" foreignKeyName="service_id_tb_versions_fk" references="tb_services(id)"/>
+                <constraints nullable="false" foreignKeyName="service_id_tb_versions_fk" checkConstraint="false" references="tb_services(id)" unique="false" />
             </column>
             <column name="version" type="VARCHAR(32)">
                 <constraints nullable="false"/>
@@ -26,6 +28,7 @@ http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
         </createIndex>
         <rollback>
             <dropTable tableName="tb_versions"/>
+            <dropSequence sequenceName="tb_versions_id_seq"/>
         </rollback>
     </changeSet>
 
