@@ -4,9 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpStatusCodeException;
 import ru.openbank.releasesservice.dto.HotfixDto;
 import ru.openbank.releasesservice.dto.PageDto;
 import ru.openbank.releasesservice.dto.ReleaseDto;
@@ -50,8 +48,8 @@ public class ReleaseServiceImpl implements ReleaseService {
 
     @Override
     public HotfixDto saveHotfix(long id, HotfixDto dto) {
-        if(releaseRepository.findById(id)==null){
-            log.warn("Release id: {} not found, hotfix cant be saved!",id);
+        if (releaseRepository.findById(id) == null) {
+            log.warn("Release id: {} not found, hotfix cant be saved!", id);
             throw new ReleaseNotFoundException();
         }
         dto.setReleaseId(id);

@@ -27,7 +27,7 @@ public class InstructionDto {
     @ApiModelProperty(value = "Идентификатор релиза\\хотфикса")
     private long releaseId;
 
-    @ApiModelProperty(value = "Признак хотфикса",required = true)
+    @ApiModelProperty(value = "Признак хотфикса", required = true)
     private boolean isHotfix;
 
     @ApiModelProperty(value = "Описание релиза \\хотфикса")

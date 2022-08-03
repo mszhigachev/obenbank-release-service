@@ -13,7 +13,6 @@ import ru.openbank.releasesservice.dto.ReleaseDto;
 import ru.openbank.releasesservice.exception.ReleaseNotFoundException;
 import ru.openbank.releasesservice.service.ReleaseService;
 
-import javax.management.ServiceNotFoundException;
 import javax.servlet.http.HttpServletResponse;
 
 
@@ -51,10 +50,9 @@ public class ReleaseController {
             response.setHeader("Location", String.format("/releases/%s/hotfixes/%s", hotfixDto.getReleaseId(), hotfixDto.getId()));
 
             return hotfixDto;
-        }
-        catch (ReleaseNotFoundException e){
+        } catch (ReleaseNotFoundException e) {
             throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND,String.format("Release id: %s not found hotfix cant be saved",id),e
+                    HttpStatus.NOT_FOUND, String.format("Release id: %s not found hotfix cant be saved", id), e
             );
         }
     }
