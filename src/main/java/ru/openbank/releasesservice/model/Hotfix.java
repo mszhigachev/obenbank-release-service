@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "tb_hotfixes")
@@ -26,7 +26,7 @@ public class Hotfix {
     private long releaseId;
 
     @Column(name = "date_fix", nullable = false)
-    private Timestamp dateFix;
+    private LocalDateTime dateFix;
 
     @Column(name = "description", length = 2555, nullable = false)
     private String description;

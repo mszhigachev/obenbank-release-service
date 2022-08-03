@@ -8,7 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -30,5 +30,5 @@ public class VersionDto {
     private String version;
 
     @ApiModelProperty(value = "Дата создания версии")
-    private Timestamp createdDate;
+    private LocalDateTime createdDate;
 }

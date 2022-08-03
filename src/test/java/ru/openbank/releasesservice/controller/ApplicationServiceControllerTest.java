@@ -2,6 +2,7 @@ package ru.openbank.releasesservice.controller;
 
 import io.restassured.RestAssured;
 import org.dbunit.database.DatabaseDataSourceConnection;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,9 +14,9 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.sql.Connection;
-
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.*;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -33,8 +34,9 @@ class ApplicationServiceControllerTest {
         RestAssured.port = port;
         RestAssured.basePath = "/";
     }
+
     @AfterEach
-    public void setTerDown() throws Exception{
+    public void setTerDown() throws Exception {
         Connection conn = databaseDataSourceConnection.getConnection();
         conn.createStatement().executeUpdate("delete from tb_versions;" +
                 "delete from tb_services;" +
@@ -50,13 +52,13 @@ class ApplicationServiceControllerTest {
                 "    \"description\": \"service-1 desc\"\n" +
                 "}";
 
-        given().body(json)
+        RestAssured.given().body(json)
                 .header("Content-Type", "application/json")
                 .post("/services").then()
                 .assertThat().statusCode(200)
-                .assertThat().body("id", equalTo(1))
-                .assertThat().body("name", equalTo("service-1"))
-                .assertThat().body("description", equalTo("service-1 desc"));
+                .assertThat().body("id", Matchers.equalTo(1))
+                .assertThat().body("name", Matchers.equalTo("service-1"))
+                .assertThat().body("description", Matchers.equalTo("service-1 desc"));
         Connection conn = databaseDataSourceConnection.getConnection();
     }
 
@@ -66,12 +68,12 @@ class ApplicationServiceControllerTest {
         Connection conn = databaseDataSourceConnection.getConnection();
         conn.createStatement().executeUpdate("insert into tb_services (name,description) values('service-1','service-1 desc')");
 
-        given().get("/services").then()
+        RestAssured.given().get("/services").then()
                 .assertThat().statusCode(200)
-                .assertThat().body("$", hasSize(1))
-                .assertThat().body("[0].id", equalTo(1))
-                .assertThat().body("[0].name", equalTo("service-1"))
-                .assertThat().body("[0].description", equalTo("service-1 desc"));
+                .assertThat().body("$", Matchers.hasSize(1))
+                .assertThat().body("[0].id", Matchers.equalTo(1))
+                .assertThat().body("[0].name", Matchers.equalTo("service-1"))
+                .assertThat().body("[0].description", Matchers.equalTo("service-1 desc"));
     }
 
 
@@ -84,12 +86,12 @@ class ApplicationServiceControllerTest {
                 " \"description\": \"My New Service\"\n" +
                 "}\n";
 
-        given().body(json)
+        RestAssured.given().body(json)
                 .header("Content-Type", "application/json")
                 .put("/services/1").then()
                 .assertThat().statusCode(200)
-                .assertThat().body("id", equalTo(1))
-                .assertThat().body("description", equalTo("My New Service"));
+                .assertThat().body("id", Matchers.equalTo(1))
+                .assertThat().body("description", Matchers.equalTo("My New Service"));
     }
 
     @Test
@@ -100,13 +102,13 @@ class ApplicationServiceControllerTest {
                 "    \"version\": \"v1\"\n" +
                 "}";
 
-        given().body(json)
+        RestAssured.given().body(json)
                 .header("Content-Type", "application/json")
                 .post("/services/versions").then()
                 .assertThat().statusCode(200)
-                .assertThat().body("id", equalTo(1))
-                .assertThat().body("version", equalTo("v1"))
-                .assertThat().body("$", hasKey("createdDate"));
+                .assertThat().body("id", Matchers.equalTo(1))
+                .assertThat().body("version", Matchers.equalTo("v1"))
+                .assertThat().body("$", Matchers.hasKey("createdDate"));
     }
 
     @Test
@@ -119,35 +121,35 @@ class ApplicationServiceControllerTest {
                 "    \"version\": \"v1\"\n" +
                 "}";
 
-        given().body(json)
+        RestAssured.given().body(json)
                 .header("Content-Type", "application/json")
                 .post("/services/versions").then()
                 .assertThat().statusCode(200)
-                .assertThat().body("id", equalTo(1))
-                .assertThat().body("version", equalTo("v1"))
-                .assertThat().body("$", hasKey("createdDate"));
+                .assertThat().body("id", Matchers.equalTo(1))
+                .assertThat().body("version", Matchers.equalTo("v1"))
+                .assertThat().body("$", Matchers.hasKey("createdDate"));
 
     }
 
     @Test
     void getVersionById() throws Exception {
+        LocalDateTime testTime = LocalDateTime.now(ZoneId.of("UTC")).truncatedTo(ChronoUnit.SECONDS);
         Connection conn = databaseDataSourceConnection.getConnection();
-        conn.createStatement().executeUpdate("insert into tb_services (name,description) values('service-1','service-1 desc');" +
+        conn.createStatement().executeUpdate(String.format("insert into tb_services (name,description) values('service-1','service-1 desc');" +
                 "INSERT INTO public.tb_versions(\n" +
                 "\tservice_id, version, created_date)\n" +
-                "\tVALUES ( 1, 'v1', '2022-01-01 00:00:00');");
+                "\tVALUES ( 1, 'v1', '%s');", testTime));
 
-        given().get("/services/1/versions").then()
+        RestAssured.given().get("/services/1/versions").then()
                 .assertThat().statusCode(200)
-                .assertThat().body("pageNumber", equalTo(0))
-                .assertThat().body("pageSize", equalTo(10))
-                .assertThat().body("totalPages", equalTo(1))
-                .assertThat().body("totalElements", equalTo(1))
-                .assertThat().body("content", hasSize(1))
-                .assertThat().body("content[0].id", equalTo(1))
-                .assertThat().body("content[0].serviceId", equalTo(1))
-                .assertThat().body("content[0].version", equalTo("v1"))
-                .assertThat().body("content[0].createdDate", equalTo("2022-01-01T00:00:00.000+00:00"));
-
+                .assertThat().body("pageNumber", Matchers.equalTo(0))
+                .assertThat().body("pageSize", Matchers.equalTo(10))
+                .assertThat().body("totalPages", Matchers.equalTo(1))
+                .assertThat().body("totalElements", Matchers.equalTo(1))
+                .assertThat().body("content", Matchers.hasSize(1))
+                .assertThat().body("content[0].id", Matchers.equalTo(1))
+                .assertThat().body("content[0].serviceId", Matchers.equalTo(1))
+                .assertThat().body("content[0].version", Matchers.equalTo("v1"))
+                .assertThat().body("content[0].createdDate", Matchers.equalTo(testTime.toString()));
     }
 }

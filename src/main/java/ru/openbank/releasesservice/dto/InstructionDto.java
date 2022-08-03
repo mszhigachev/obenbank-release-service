@@ -8,7 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -27,23 +27,23 @@ public class InstructionDto {
     @ApiModelProperty(value = "Идентификатор релиза\\хотфикса")
     private long releaseId;
 
-    @ApiModelProperty(value = "Признак хотфикса")
+    @ApiModelProperty(value = "Признак хотфикса",required = true)
     private boolean isHotfix;
 
     @ApiModelProperty(value = "Описание релиза \\хотфикса")
     private String description;
 
     @ApiModelProperty(value = "Дата начала релиза")
-    private Timestamp dateStart;
+    private LocalDateTime dateStart;
 
     @ApiModelProperty(value = "Дата хотфикса")
-    private Timestamp dateHotfix;
+    private LocalDateTime dateHotfix;
 
     @ApiModelProperty(value = "Дата окончания релиза")
-    private Timestamp dateEnd;
+    private LocalDateTime dateEnd;
 
     @ApiModelProperty(value = "Дата кодфриза")
-    private Timestamp dateFreeze;
+    private LocalDateTime dateFreeze;
 
     @ApiModelProperty(value = "Список сервисов и их версий")
     private List<ApplicationServiceInstructionDto> services;

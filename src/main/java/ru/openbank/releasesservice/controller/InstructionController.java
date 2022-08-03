@@ -43,6 +43,6 @@ public class InstructionController {
             url = String.format("/instructions/releases/%s", instructionDto.getReleaseId());
         }
         response.setHeader("Location", url);
-        return instructionsService.saveInstruction(dto);
+        return instructionDto;
     }
 }

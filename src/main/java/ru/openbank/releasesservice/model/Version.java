@@ -7,7 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 @Entity
 @Table(name = "tb_versions")
@@ -29,10 +30,10 @@ public class Version {
     private String version;
 
     @Column(name = "created_date", nullable = false, columnDefinition = "DEFAULT now()")
-    private Timestamp createdDate;
+    private LocalDateTime createdDate;
 
     @PrePersist
     private void save() {
-        this.createdDate = new Timestamp(System.currentTimeMillis());
+        this.createdDate = LocalDateTime.now(ZoneId.of("UTC"));
     }
 }

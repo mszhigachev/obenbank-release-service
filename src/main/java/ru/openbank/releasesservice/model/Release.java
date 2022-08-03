@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -30,17 +30,16 @@ public class Release {
     private String description;
 
     @Column(name = "date_start", nullable = false)
-    private Timestamp dateStart;
+    private LocalDateTime dateStart;
 
     @Column(name = "date_end", nullable = false)
-    private Timestamp dateEnd;
+    private LocalDateTime dateEnd;
 
     @Column(name = "date_freeze", nullable = false)
-    private Timestamp dateFreeze;
+    private LocalDateTime dateFreeze;
 
     @OneToMany(mappedBy = "releaseId")
     @OrderBy("dateFix DESC")
     private List<Hotfix> hotfixes = new java.util.ArrayList<>();
-
 
 }

@@ -8,7 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -28,7 +28,7 @@ public class HotfixDto {
 
     //    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @ApiModelProperty(value = "Дата хотфикса", required = true)
-    private Timestamp dateFix;
+    private LocalDateTime dateFix;
 
     @ApiModelProperty(value = "Описание хотфикса", required = true)
     private String description;

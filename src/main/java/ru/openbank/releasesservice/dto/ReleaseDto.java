@@ -8,7 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -30,15 +30,15 @@ public class ReleaseDto {
 
     @ApiModelProperty(value = "Дата начала релиза", required = true)
 //    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Timestamp dateStart;
+    private LocalDateTime dateStart;
 
     @ApiModelProperty(value = "Дата конца релиза", required = true)
 //    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Timestamp dateEnd;
+    private LocalDateTime dateEnd;
 
     @ApiModelProperty(value = "Дата кодфриза", required = true)
 //    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Timestamp dateFreeze;
+    private LocalDateTime dateFreeze;
 
     @ApiModelProperty(value = "Опциональный список хотфиксов релиза")
     private List<HotfixDto> hotFixes;

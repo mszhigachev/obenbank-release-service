@@ -14,7 +14,8 @@ http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="tb_versions_pkey"/>
             </column>
             <column name="service_id" type="BIGINT">
-                <constraints nullable="false" foreignKeyName="service_id_tb_versions_fk" checkConstraint="false" references="tb_services(id)" unique="false" />
+                <constraints nullable="false" foreignKeyName="service_id_tb_versions_fk" checkConstraint="false"
+                             references="tb_services(id)" unique="false"/>
             </column>
             <column name="version" type="VARCHAR(32)">
                 <constraints nullable="false"/>
