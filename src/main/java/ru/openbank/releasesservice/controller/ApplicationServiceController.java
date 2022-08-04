@@ -42,7 +42,7 @@ public class ApplicationServiceController {
         return applicationServiceDto;
     }
 
-    @ApiOperation(value = "Изменение сервиса сервиса")
+    @ApiOperation(value = "Изменение сервиса")
     @PutMapping("/{id}")
     public ApplicationServiceDto update(@ApiParam(value = "Идентификатор сервиса", required = true) @PathVariable("id") long id, @ApiParam(value = "JSON с набором изминяемых полей") @RequestBody ApplicationServiceDto dto) {
         return applicationServiceService.update(id, dto);

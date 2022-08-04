@@ -9,6 +9,7 @@ import ru.openbank.releasesservice.dto.ApplicationServiceDto;
 import ru.openbank.releasesservice.dto.ApplicationServiceVersionDto;
 import ru.openbank.releasesservice.dto.PageDto;
 import ru.openbank.releasesservice.dto.VersionDto;
+import ru.openbank.releasesservice.exception.NotFoundException;
 import ru.openbank.releasesservice.mapper.ApplicationServiceMapper;
 import ru.openbank.releasesservice.mapper.VersionMapper;
 import ru.openbank.releasesservice.model.ApplicationService;
@@ -57,6 +58,9 @@ public class ApplicationServiceServiceImpl implements ApplicationServiceService 
     public ApplicationServiceDto update(long id, ApplicationServiceDto serviceDto) {
         log.info("Searching service by id: {}", id);
         ApplicationService service = applicationServiceRepository.findById(id);
+        if (service == null) {
+            throw new NotFoundException(String.format("Service id: %s not found", id));
+        }
         log.info("Updating service {}, data: {}", service.getId(), serviceDto);
         service.setDescription(serviceDto.getDescription());
         return applicationServiceMapper.toDto(applicationServiceRepository.save(service));
@@ -66,6 +70,9 @@ public class ApplicationServiceServiceImpl implements ApplicationServiceService 
     public PageDto<VersionDto> getVersions(long id, int pageNumber, int pageSize) {
         log.info("Searching versions by service id: {},pageNumber: {}, pageSize: {}", id, pageNumber, pageSize);
         Page<Version> versionsPage = versionRepository.findByServiceIdOrderByCreatedDateDesc(id, PageRequest.of(pageNumber, pageSize));
+        if (versionsPage.getContent().isEmpty()) {
+            throw new NotFoundException(String.format("Versions for service id: %s not found", id));
+        }
         PageDto page = PageDto.of(versionsPage);
         page.setContent(versionMapper.toDtos(page.getContent()));
         return page;

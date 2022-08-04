@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import ru.openbank.releasesservice.dto.HotfixDto;
 import ru.openbank.releasesservice.dto.PageDto;
 import ru.openbank.releasesservice.dto.ReleaseDto;
-import ru.openbank.releasesservice.exception.ReleaseNotFoundException;
+import ru.openbank.releasesservice.exception.NotFoundException;
 import ru.openbank.releasesservice.mapper.HotfixMapper;
 import ru.openbank.releasesservice.mapper.ReleaseMapper;
 import ru.openbank.releasesservice.model.Hotfix;
@@ -34,6 +34,10 @@ public class ReleaseServiceImpl implements ReleaseService {
     public PageDto<ReleaseDto> getAll(boolean isIncludeHotfixes, int pageNumber, int pageSize) {
         log.info("Get all releases");
         Page<Release> releasesPage = releaseRepository.findAllByOrderByDateStartDesc(PageRequest.of(pageNumber, pageSize));
+        if (releasesPage.getContent().isEmpty()) {
+            log.info("No releases found");
+            throw new NotFoundException("No releases found");
+        }
         PageDto page = PageDto.of(releasesPage);
         page.setContent(releaseMapper.toDtos(page.getContent(), isIncludeHotfixes));
         return page;
@@ -50,7 +54,7 @@ public class ReleaseServiceImpl implements ReleaseService {
     public HotfixDto saveHotfix(long id, HotfixDto dto) {
         if (releaseRepository.findById(id) == null) {
             log.warn("Release id: {} not found, hotfix cant be saved!", id);
-            throw new ReleaseNotFoundException();
+            throw new NotFoundException(String.format("Release id: %s not found, hotfix cant be saved!", id));
         }
         dto.setReleaseId(id);
         Hotfix hotfix = hotfixMapper.fromDto(dto);

@@ -4,21 +4,21 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(value = HttpStatus.NOT_FOUND)
-public class ReleaseNotFoundException extends RuntimeException {
+public class NotFoundException extends RuntimeException {
 
-    public ReleaseNotFoundException() {
+    public NotFoundException() {
         super();
     }
 
-    public ReleaseNotFoundException(String message, Throwable cause) {
+    public NotFoundException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public ReleaseNotFoundException(String message) {
+    public NotFoundException(String message) {
         super(message);
     }
 
-    public ReleaseNotFoundException(Throwable cause) {
+    public NotFoundException(Throwable cause) {
         super(cause);
     }
 }

@@ -32,6 +32,7 @@ public class InstructionController {
         return instructionsService.getHotfixInstructions(hotfixId);
     }
 
+    @ApiOperation(value = "Сохранение инструкции к релизу\\хотфиксу")
     @PostMapping
     public InstructionDto saveInstruction(@ApiParam(value = "JSON с инструкцией", required = true)
                                           @RequestBody InstructionDto dto, HttpServletResponse response) {
@@ -43,6 +44,7 @@ public class InstructionController {
             url = String.format("/instructions/releases/%s", instructionDto.getReleaseId());
         }
         response.setHeader("Location", url);
+        response.setStatus(201);
         return instructionDto;
     }
 }

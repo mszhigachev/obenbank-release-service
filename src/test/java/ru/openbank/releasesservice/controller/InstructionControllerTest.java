@@ -53,7 +53,7 @@ class InstructionControllerTest {
 
     @Test
     void getReleaseInstruction() throws Exception {
-        LocalDateTime testTime = LocalDateTime.now(ZoneId.of("UTC")).truncatedTo(ChronoUnit.MILLIS);
+        LocalDateTime testTime = LocalDateTime.now(ZoneId.of("UTC")).truncatedTo(ChronoUnit.SECONDS);
 
         Connection conn = databaseDataSourceConnection.getConnection();
         conn.createStatement().executeUpdate(String.format("" +
@@ -79,7 +79,7 @@ class InstructionControllerTest {
 
     @Test
     void getHotfixInstruction() throws Exception {
-        LocalDateTime testTime = LocalDateTime.now(ZoneId.of("UTC")).truncatedTo(ChronoUnit.MILLIS);
+        LocalDateTime testTime = LocalDateTime.now(ZoneId.of("UTC")).truncatedTo(ChronoUnit.SECONDS);
 
         Connection conn = databaseDataSourceConnection.getConnection();
         conn.createStatement().executeUpdate(String.format("" +
@@ -103,7 +103,7 @@ class InstructionControllerTest {
 
     @Test
     void saveHotfixInstruction() throws Exception {
-        LocalDateTime testTime = LocalDateTime.now(ZoneId.of("UTC")).truncatedTo(ChronoUnit.MILLIS);
+        LocalDateTime testTime = LocalDateTime.now(ZoneId.of("UTC")).truncatedTo(ChronoUnit.SECONDS);
 
         Connection conn = databaseDataSourceConnection.getConnection();
         conn.createStatement().executeUpdate(String.format("" +
@@ -127,7 +127,7 @@ class InstructionControllerTest {
                 .body(json)
                 .post("/instructions")
                 .then()
-                .assertThat().statusCode(200)
+                .assertThat().statusCode(201)
                 .assertThat().body("releaseId", Matchers.equalTo(1))
                 .assertThat().body("hotfix", Matchers.is(true))
                 .assertThat().body("services", Matchers.hasSize(1))
@@ -139,7 +139,7 @@ class InstructionControllerTest {
 
     @Test
     void saveReleaseInstruction() throws Exception {
-        LocalDateTime testTime = LocalDateTime.now(ZoneId.of("UTC")).truncatedTo(ChronoUnit.MILLIS);
+        LocalDateTime testTime = LocalDateTime.now(ZoneId.of("UTC")).truncatedTo(ChronoUnit.SECONDS);
 
         Connection conn = databaseDataSourceConnection.getConnection();
         conn.createStatement().executeUpdate(String.format("" +
@@ -162,7 +162,7 @@ class InstructionControllerTest {
                 .body(json)
                 .post("/instructions")
                 .then()
-                .assertThat().statusCode(200)
+                .assertThat().statusCode(201)
                 .assertThat().body("releaseId", Matchers.equalTo(1))
                 .assertThat().body("hotfix", Matchers.is(false))
                 .assertThat().body("services", Matchers.hasSize(1))

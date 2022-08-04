@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.openbank.releasesservice.dto.InstructionDto;
+import ru.openbank.releasesservice.exception.NotFoundException;
 import ru.openbank.releasesservice.mapper.InstructionMapper;
 import ru.openbank.releasesservice.model.Hotfix;
 import ru.openbank.releasesservice.model.Instruction;
@@ -32,7 +33,9 @@ public class InstructionServiceImpl implements InstructionsService {
     public InstructionDto getReleaseInstructions(long releaseId) {
         log.info("Searching instructions for release {}", releaseId);
         Release release = releaseRepository.findById(releaseId);
-
+        if (release == null) {
+            throw new NotFoundException(String.format("Release id: %s not found", releaseId));
+        }
         List<Instruction> instructions = instructionRepository.findAllByReleaseIdAndIsHotfix(release.getId(), false);
 
         return instructionMapper.toReleaseDto(release, instructions);
@@ -42,6 +45,10 @@ public class InstructionServiceImpl implements InstructionsService {
     public InstructionDto getHotfixInstructions(long hotfixId) {
         log.info("Searching instructions for hotfix {}", hotfixId);
         Hotfix hotfix = hotfixRepository.findById(hotfixId);
+
+        if (hotfix == null) {
+            throw new NotFoundException(String.format("Hotfix id: %s not found", hotfixId));
+        }
 
         List<Instruction> instructions = instructionRepository.findAllByReleaseIdAndIsHotfix(hotfix.getId(), true);
 
@@ -63,7 +70,6 @@ public class InstructionServiceImpl implements InstructionsService {
             log.info("Saving instructions {}", instructions);
             return instructionMapper.toReleaseResponseDto(release, instructionRepository.saveAll(instructions));
         }
-
 
     }
 }

@@ -47,7 +47,7 @@ class ReleaseControllerTest {
 
     @Test
     void getAll() throws Exception {
-        LocalDateTime testTime = LocalDateTime.now(ZoneId.of("UTC")).truncatedTo(ChronoUnit.MILLIS);
+        LocalDateTime testTime = LocalDateTime.now(ZoneId.of("UTC")).truncatedTo(ChronoUnit.SECONDS);
 
         Connection conn = databaseDataSourceConnection.getConnection();
         conn.createStatement().executeUpdate(String.format("" +
@@ -71,7 +71,7 @@ class ReleaseControllerTest {
 
     @Test
     void getAllWithHotfix() throws Exception {
-        LocalDateTime testTime = LocalDateTime.now(ZoneId.of("UTC")).truncatedTo(ChronoUnit.MILLIS);
+        LocalDateTime testTime = LocalDateTime.now(ZoneId.of("UTC")).truncatedTo(ChronoUnit.SECONDS);
 
         Connection conn = databaseDataSourceConnection.getConnection();
         conn.createStatement().executeUpdate(String.format("" +
@@ -99,7 +99,7 @@ class ReleaseControllerTest {
 
     @Test
     void save() {
-        LocalDateTime testTime = LocalDateTime.now(ZoneId.of("UTC")).truncatedTo(ChronoUnit.MILLIS);
+        LocalDateTime testTime = LocalDateTime.now(ZoneId.of("UTC")).truncatedTo(ChronoUnit.SECONDS);
         String json = String.format("{\n" +
                 "    \"name\": \"name\",\n" +
                 "    \"description\": \"desc\",\n" +
@@ -110,7 +110,7 @@ class ReleaseControllerTest {
         RestAssured.given().header("Content-Type", "application/json")
                 .body(json)
                 .post("/releases").then()
-                .assertThat().statusCode(200)
+                .assertThat().statusCode(201)
                 .assertThat().body("id", Matchers.equalTo(1))
                 .assertThat().body("name", Matchers.equalTo("name"))
                 .assertThat().body("description", Matchers.equalTo("desc"))
@@ -121,7 +121,7 @@ class ReleaseControllerTest {
 
     @Test
     void saveHotfix() throws Exception {
-        LocalDateTime testTime = LocalDateTime.now(ZoneId.of("UTC")).truncatedTo(ChronoUnit.MILLIS);
+        LocalDateTime testTime = LocalDateTime.now(ZoneId.of("UTC")).truncatedTo(ChronoUnit.SECONDS);
 
         Connection conn = databaseDataSourceConnection.getConnection();
         conn.createStatement().executeUpdate(String.format("" +
@@ -133,7 +133,7 @@ class ReleaseControllerTest {
         RestAssured.given().header("Content-Type", "application/json")
                 .body(json)
                 .post("/releases/1/hotfixes").then()
-                .assertThat().statusCode(200)
+                .assertThat().statusCode(201)
                 .assertThat().body("id", Matchers.equalTo(1))
                 .assertThat().body("releaseId", Matchers.equalTo(1))
                 .assertThat().body("dateFix", Matchers.equalTo(testTime.toString()))

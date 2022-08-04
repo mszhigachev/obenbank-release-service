@@ -4,13 +4,10 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 import ru.openbank.releasesservice.dto.HotfixDto;
 import ru.openbank.releasesservice.dto.PageDto;
 import ru.openbank.releasesservice.dto.ReleaseDto;
-import ru.openbank.releasesservice.exception.ReleaseNotFoundException;
 import ru.openbank.releasesservice.service.ReleaseService;
 
 import javax.servlet.http.HttpServletResponse;
@@ -37,6 +34,7 @@ public class ReleaseController {
     public ReleaseDto save(@ApiParam(value = "JSON с полями релиза", required = true) @RequestBody ReleaseDto dto, HttpServletResponse response) {
         ReleaseDto releaseDto = releaseService.save(dto);
         response.setHeader("Location", String.format("/releases/%s", releaseDto.getId()));
+        response.setStatus(201);
         return releaseDto;
     }
 
@@ -45,16 +43,11 @@ public class ReleaseController {
     public HotfixDto saveHotfix(@ApiParam(value = "Идентификатор релиза", required = true) @PathVariable(name = "id") long id,
                                 @ApiParam(value = "JSON с полями хотфикса", required = true) @RequestBody HotfixDto dto,
                                 HttpServletResponse response) {
-        try {
-            HotfixDto hotfixDto = releaseService.saveHotfix(id, dto);
-            response.setHeader("Location", String.format("/releases/%s/hotfixes/%s", hotfixDto.getReleaseId(), hotfixDto.getId()));
 
-            return hotfixDto;
-        } catch (ReleaseNotFoundException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, String.format("Release id: %s not found hotfix cant be saved", id), e
-            );
-        }
+        HotfixDto hotfixDto = releaseService.saveHotfix(id, dto);
+        response.setHeader("Location", String.format("/releases/%s/hotfixes/%s", hotfixDto.getReleaseId(), hotfixDto.getId()));
+        response.setStatus(201);
+        return hotfixDto;
     }
 
 }
