@@ -17,11 +17,14 @@ import java.sql.Connection;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
+import java.util.Map;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(locations = "classpath:application-test.properties")
 class ReleaseControllerTest {
+
+    private Map<String, String> cookie;
 
     @LocalServerPort
     int port;
@@ -32,7 +35,7 @@ class ReleaseControllerTest {
     @BeforeEach
     public void setUp() throws Exception {
         RestAssured.port = port;
-        RestAssured.basePath = "/";
+        cookie = RestAssured.given().auth().basic("bob", "bobspassword").get("/").getCookies();
     }
 
     @AfterEach
@@ -53,7 +56,9 @@ class ReleaseControllerTest {
         conn.createStatement().executeUpdate(String.format("" +
 
                 "INSERT INTO tb_releases( name, description, date_start, date_end, date_freeze) VALUES ( 'name', 'desc', '%1$s', '%1$s', '%1$s');", testTime));
-        RestAssured.given().get("/releases").then()
+        RestAssured.given()
+                .cookies(cookie)
+                .get("/releases").then()
                 .assertThat().statusCode(200)
                 .assertThat().body("pageNumber", Matchers.equalTo(0))
                 .assertThat().body("pageSize", Matchers.equalTo(10))
@@ -78,7 +83,9 @@ class ReleaseControllerTest {
 
                 "INSERT INTO tb_releases( name, description, date_start, date_end, date_freeze) VALUES ( 'name', 'desc', '%1$s', '%1$s', '%1$s');" +
                 "INSERT INTO public.tb_hotfixes(release_id, date_fix, description) VALUES (1, '%s', 'hotfix_test_desc');", testTime));
-        RestAssured.given().get("/releases?is_include_hotfixes=true").then()
+        RestAssured.given()
+                .cookies(cookie)
+                .get("/releases?is_include_hotfixes=true").then()
                 .assertThat().statusCode(200)
                 .assertThat().body("pageNumber", Matchers.equalTo(0))
                 .assertThat().body("pageSize", Matchers.equalTo(10))
@@ -109,6 +116,7 @@ class ReleaseControllerTest {
                 "}", testTime);
         RestAssured.given().header("Content-Type", "application/json")
                 .body(json)
+                .cookies(cookie)
                 .post("/releases").then()
                 .assertThat().statusCode(201)
                 .assertThat().body("id", Matchers.equalTo(1))
@@ -132,6 +140,7 @@ class ReleaseControllerTest {
                 "}", testTime);
         RestAssured.given().header("Content-Type", "application/json")
                 .body(json)
+                .cookies(cookie)
                 .post("/releases/1/hotfixes").then()
                 .assertThat().statusCode(201)
                 .assertThat().body("id", Matchers.equalTo(1))

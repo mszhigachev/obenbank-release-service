@@ -1,6 +1,7 @@
 package ru.openbank.releasesservice.controller;
 
 import io.restassured.RestAssured;
+import io.restassured.http.Cookie;
 import org.dbunit.database.DatabaseDataSourceConnection;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.AfterEach;
@@ -17,12 +18,13 @@ import java.sql.Connection;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
+import java.util.Map;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(locations = "classpath:application-test.properties")
 class ApplicationServiceControllerTest {
-
+    private Map<String,String> cookie;
     @LocalServerPort
     int port;
 
@@ -32,7 +34,7 @@ class ApplicationServiceControllerTest {
     @BeforeEach
     public void setUp() throws Exception {
         RestAssured.port = port;
-        RestAssured.basePath = "/";
+        cookie= RestAssured.given().auth().basic("bob", "bobspassword").get("/").getCookies();
     }
 
     @AfterEach
@@ -54,6 +56,7 @@ class ApplicationServiceControllerTest {
 
         RestAssured.given().body(json)
                 .header("Content-Type", "application/json")
+                .cookies(cookie)
                 .post("/services").then()
                 .assertThat().statusCode(200)
                 .assertThat().body("id", Matchers.equalTo(1))
@@ -68,7 +71,9 @@ class ApplicationServiceControllerTest {
         Connection conn = databaseDataSourceConnection.getConnection();
         conn.createStatement().executeUpdate("insert into tb_services (name,description) values('service-1','service-1 desc')");
 
-        RestAssured.given().get("/services").then()
+        RestAssured.given()
+                .cookies(cookie)
+                .get("/services").then()
                 .assertThat().statusCode(200)
                 .assertThat().body("$", Matchers.hasSize(1))
                 .assertThat().body("[0].id", Matchers.equalTo(1))
@@ -88,6 +93,7 @@ class ApplicationServiceControllerTest {
 
         RestAssured.given().body(json)
                 .header("Content-Type", "application/json")
+                .cookies(cookie)
                 .put("/services/1").then()
                 .assertThat().statusCode(200)
                 .assertThat().body("id", Matchers.equalTo(1))
@@ -104,6 +110,7 @@ class ApplicationServiceControllerTest {
 
         RestAssured.given().body(json)
                 .header("Content-Type", "application/json")
+                .cookies(cookie)
                 .post("/services/versions").then()
                 .assertThat().statusCode(200)
                 .assertThat().body("id", Matchers.equalTo(1))
@@ -123,6 +130,7 @@ class ApplicationServiceControllerTest {
 
         RestAssured.given().body(json)
                 .header("Content-Type", "application/json")
+                .cookies(cookie)
                 .post("/services/versions").then()
                 .assertThat().statusCode(200)
                 .assertThat().body("id", Matchers.equalTo(1))
@@ -140,7 +148,9 @@ class ApplicationServiceControllerTest {
                 "\tservice_id, version, created_date)\n" +
                 "\tVALUES ( 1, 'v1', '%s');", testTime));
 
-        RestAssured.given().get("/services/1/versions").then()
+        RestAssured.given()
+                .cookies(cookie)
+                .get("/services/1/versions").then()
                 .assertThat().statusCode(200)
                 .assertThat().body("pageNumber", Matchers.equalTo(0))
                 .assertThat().body("pageSize", Matchers.equalTo(10))

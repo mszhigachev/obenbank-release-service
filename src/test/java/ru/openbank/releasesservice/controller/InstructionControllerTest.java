@@ -17,12 +17,13 @@ import java.sql.Connection;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
+import java.util.Map;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(locations = "classpath:application-test.properties")
 class InstructionControllerTest {
-
+    private Map<String,String> cookie;
     @LocalServerPort
     int port;
 
@@ -32,7 +33,7 @@ class InstructionControllerTest {
     @BeforeEach
     public void setUp() throws Exception {
         RestAssured.port = port;
-        RestAssured.basePath = "/";
+        cookie= RestAssured.given().auth().basic("bob", "bobspassword").get("/").getCookies();
     }
 
     @AfterEach
@@ -62,7 +63,9 @@ class InstructionControllerTest {
                 "insert into tb_releases(name, description, date_start, date_end, date_freeze) VALUES ('release-name', 'desc', '%1$s', '%1$s', '%1$s');" +
                 "insert into tb_instructions(release_id, service_id, version_id, description, is_hotfix) VALUES (1, 1, 1, 'instruction desc', false);", testTime));
 
-        RestAssured.given().get("/instructions/releases/1").then()
+        RestAssured.given()
+                .cookies(cookie)
+                .get("/instructions/releases/1").then()
                 .assertThat().statusCode(200)
                 .assertThat().body("releaseId", Matchers.equalTo(1))
                 .assertThat().body("services", Matchers.hasSize(1))
@@ -89,7 +92,9 @@ class InstructionControllerTest {
                 "insert into tb_hotfixes(release_id, date_fix, description) VALUES (1, '%1$s', 'desc');" +
                 "insert into tb_instructions(release_id, service_id, version_id, description, is_hotfix) VALUES (1, 1, 1, 'instruction desc', true);", testTime));
 
-        RestAssured.given().get("/instructions/hotfixes/1").then()
+        RestAssured.given()
+                .cookies(cookie)
+                .get("/instructions/hotfixes/1").then()
                 .assertThat().statusCode(200)
                 .assertThat().body("releaseId", Matchers.equalTo(1))
                 .assertThat().body("description", Matchers.equalTo("desc"))
@@ -125,6 +130,7 @@ class InstructionControllerTest {
                 "}";
         RestAssured.given().header("Content-Type", "application/json")
                 .body(json)
+                .cookies(cookie)
                 .post("/instructions")
                 .then()
                 .assertThat().statusCode(201)
@@ -160,6 +166,7 @@ class InstructionControllerTest {
                 "}";
         RestAssured.given().header("Content-Type", "application/json")
                 .body(json)
+                .cookies(cookie)
                 .post("/instructions")
                 .then()
                 .assertThat().statusCode(201)
