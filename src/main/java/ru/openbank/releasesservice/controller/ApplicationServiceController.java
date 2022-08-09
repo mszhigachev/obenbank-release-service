@@ -28,12 +28,6 @@ public class ApplicationServiceController {
         return applicationServiceService.getAll();
     }
 
-
-    //    @GetMapping("/{id}")
-//    public ApplicationServiceDto getById(@PathVariable("id") long id) {
-//
-//        return applicationServiceService.getById(id);
-//    }
     @ApiOperation(value = "Cохранение сервиса")
     @PostMapping
     public ApplicationServiceDto save(@ApiParam(value = "JSON с именем сервиса и его описанием") @RequestBody ApplicationServiceDto dto, HttpServletResponse response) {

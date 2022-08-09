@@ -24,13 +24,13 @@ import java.util.Map;
 @TestPropertySource(locations = "classpath:application-test.properties")
 class ReleaseControllerTest {
 
-    private Map<String, String> cookie;
-
     @LocalServerPort
     int port;
 
     @Autowired
     DatabaseDataSourceConnection databaseDataSourceConnection;
+
+    private Map<String, String> cookie;
 
     @BeforeEach
     public void setUp() throws Exception {

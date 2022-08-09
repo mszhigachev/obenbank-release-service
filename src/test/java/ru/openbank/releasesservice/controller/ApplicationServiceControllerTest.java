@@ -1,7 +1,6 @@
 package ru.openbank.releasesservice.controller;
 
 import io.restassured.RestAssured;
-import io.restassured.http.Cookie;
 import org.dbunit.database.DatabaseDataSourceConnection;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.AfterEach;
@@ -24,17 +23,19 @@ import java.util.Map;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(locations = "classpath:application-test.properties")
 class ApplicationServiceControllerTest {
-    private Map<String,String> cookie;
+
     @LocalServerPort
     int port;
 
     @Autowired
     DatabaseDataSourceConnection databaseDataSourceConnection;
 
+    private Map<String, String> cookie;
+
     @BeforeEach
     public void setUp() throws Exception {
         RestAssured.port = port;
-        cookie= RestAssured.given().auth().basic("bob", "bobspassword").get("/").getCookies();
+        cookie = RestAssured.given().auth().basic("bob", "bobspassword").get("/").getCookies();
     }
 
     @AfterEach

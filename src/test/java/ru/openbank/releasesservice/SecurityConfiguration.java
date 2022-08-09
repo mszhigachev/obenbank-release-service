@@ -1,4 +1,4 @@
-package ru.openbank.releasesservice.configuration;
+package ru.openbank.releasesservice;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

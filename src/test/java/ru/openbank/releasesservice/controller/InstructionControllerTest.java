@@ -23,17 +23,19 @@ import java.util.Map;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(locations = "classpath:application-test.properties")
 class InstructionControllerTest {
-    private Map<String,String> cookie;
+
     @LocalServerPort
     int port;
 
     @Autowired
     DatabaseDataSourceConnection databaseDataSourceConnection;
 
+    private Map<String, String> cookie;
+
     @BeforeEach
     public void setUp() throws Exception {
         RestAssured.port = port;
-        cookie= RestAssured.given().auth().basic("bob", "bobspassword").get("/").getCookies();
+        cookie = RestAssured.given().auth().basic("bob", "bobspassword").get("/").getCookies();
     }
 
     @AfterEach
